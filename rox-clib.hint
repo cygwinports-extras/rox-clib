@@ -1,0 +1,10 @@
+category: ROX
+requires: libgcc1 libglib2.0_0
+sdesc: "ROX C library (support data and utilities)"
+ldesc: "ROX is a fast, user friendly desktop based on RISC OS which 
+makes extensive use of drag-and-drop. The interface revolves around the 
+file manager, or filer, following the traditional Unix view that 
+`everything is a file' rather than trying to hide the filesystem beneath 
+start menus, wizards, or druids.
+
+This package provides the library used by ROX C programs."

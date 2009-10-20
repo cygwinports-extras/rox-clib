@@ -1,0 +1,40 @@
+--- origsrc/ROX-CLib/AppRun	2006-11-21 13:16:58.000000000 -0600
++++ src/ROX-CLib/AppRun	2009-10-19 13:39:59.309453300 -0500
+@@ -5,6 +5,8 @@ LIB=rox-clib
+ APP_DIR=`dirname $0`
+ APP_DIR=`cd "$APP_DIR";pwd`; export APP_DIR
+ 
++export PLATFORM="CYGWIN-ix86"
++
+ if [ "x$PLATFORM" = x ]; then
+ 
+   ARCH=`uname -m`
+--- origsrc/ROX-CLib/src/Makefile.in	2007-10-13 10:58:30.000000000 -0500
++++ src/ROX-CLib/src/Makefile.in	2009-10-08 21:22:31.034388000 -0500
+@@ -32,7 +32,7 @@ INCLUDEDIR = ${PLATFORM_DIR}/include/rox
+ LIBFILE.a = ${LIBDIR}/lib${LIBNAME}.a
+ LIBFILE.la = ${LIBDIR}/lib${LIBNAME}.la
+ LTCOMPILE = ${LIBTOOL} --mode=compile ${CC} ${CFLAGS} -c
+-LINK = $(LIBTOOL) --mode=link ${CC} ${CFLAGS} ${LDFLAGS} -version-info ${LIB_VERSION}
++LINK = $(LIBTOOL) --mode=link ${CC} ${CFLAGS} ${LDFLAGS} -version-info ${LIB_VERSION} -no-undefined
+ 
+ ############ Things to change for different programs
+ 
+--- origsrc/ROX-CLib/src/xattr.c	2006-11-06 12:19:49.000000000 -0600
++++ src/ROX-CLib/src/xattr.c	2009-10-08 21:30:55.478085400 -0500
+@@ -46,11 +46,15 @@ void rox_xattr_init(void)
+ {
+   void *libc;
+   
++#ifdef __CYGWIN__
++  libc = dlopen("cygwin1.dll", RTLD_LAZY);
++#else
+   libc = dlopen("libc.so.6", RTLD_LAZY | RTLD_NOLOAD);
+   if (!libc) {
+     /* Try a different name for uClib support */
+     libc = dlopen("libc.so", RTLD_LAZY | RTLD_NOLOAD);
+   }
++#endif
+ 
+   if (!libc)
+     return;	/* Give up on xattr support */
