@@ -32,12 +32,8 @@ src_install() {
 	rox_install
 	mv ${D}/usr/lib/rox/${ROX_APP} ${D}/usr/lib/
 
-	sed -e "/^dlname=/ s|\.\./bin|../../../../bin|" \
-		-e "/^libdir=/ s|=.*|='/usr/lib/${ROX_APP}/CYGWIN-ix86/lib'|" \
+	sed -e "/^libdir=/ s|=.*|='/usr/lib/${ROX_APP}/CYGWIN-ix86/lib'|" \
 		-i ${D}/usr/lib/${ROX_APP}/CYGWIN-ix86/lib/librox-clib.la
 	sed -e "s|\${APP_DIR}|/usr/lib/${ROX_APP}|" \
 		-i ${D}/usr/lib/${ROX_APP}/CYGWIN-ix86/lib/${ROX_APP}.pc
-
-	dodir /usr/bin
-	mv ${D}/usr/lib/${ROX_APP}/CYGWIN-ix86/bin/*.dll ${D}/usr/bin/
 }
