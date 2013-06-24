@@ -1,14 +1,14 @@
 --- origsrc/ROX-CLib/AppRun	2006-11-21 13:16:58.000000000 -0600
-+++ src/ROX-CLib/AppRun	2009-10-19 13:39:59.309453300 -0500
-@@ -5,6 +5,8 @@ LIB=rox-clib
- APP_DIR=`dirname $0`
- APP_DIR=`cd "$APP_DIR";pwd`; export APP_DIR
++++ src/ROX-CLib/AppRun	2013-06-23 18:21:12.397282500 -0500
+@@ -12,7 +12,7 @@ if [ "x$PLATFORM" = x ]; then
+ 	i?86) ARCH=ix86 ;;
+   esac
  
-+export PLATFORM="CYGWIN-ix86"
-+
- if [ "x$PLATFORM" = x ]; then
+-  PLATFORM=`uname -s`-$ARCH ; export PLATFORM
++  PLATFORM=CYGWIN-$ARCH ; export PLATFORM
+ fi
  
-   ARCH=`uname -m`
+ if [ "x$MAKE" = x ]; then
 --- origsrc/ROX-CLib/src/Makefile.in	2007-10-13 10:58:30.000000000 -0500
 +++ src/ROX-CLib/src/Makefile.in	2009-10-08 21:22:31.034388000 -0500
 @@ -32,7 +32,7 @@ INCLUDEDIR = ${PLATFORM_DIR}/include/rox

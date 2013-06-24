@@ -1,0 +1,52 @@
+inherit python rox
+
+NAME="rox-clib"
+VERSION=2.1.10
+RELEASE=1
+CATEGORY="ROX"
+SUMMARY="ROX C library (support data and utilities)"
+DESCRIPTION="ROX is a fast, user friendly desktop based on RISC OS which makes
+extensive use of drag-and-drop. The interface revolves around the file manager,
+or filer, following the traditional Unix view that 'everything is a file'
+rather than trying to hide the filesystem beneath start menus, wizards, or
+druids.  This package provides the library used by ROX C programs."
+SRC_URI="mirror://sourceforge/rox/ROX-CLib-${VERSION}.tar.gz"
+SRC_DIR=.
+
+PATCH_URI="2.1.10-cygwin.patch"
+
+PKG_NAMES="${NAME} lib${NAME}6 lib${NAME}-devel"
+rox_clib_CONTENTS="--exclude=include --exclude=usr/lib/ROX-CLib/CYGWIN-${ARCH/i6/ix}/lib
+		   usr/lib/ROX-CLib/ usr/share/doc/"
+librox_clib6_REQUIRES=${NAME}
+librox_clib6_CONTENTS="usr/bin/cygrox-clib-6.dll"
+librox_clib_devel_CONTENTS="usr/lib/ROX-CLib/CYGWIN-${ARCH/i6/ix}/include/
+			    usr/lib/ROX-CLib/CYGWIN-${ARCH/i6/ix}/lib/"
+
+DIFF_EXCLUDES="aclocal.m4 configure"
+
+ROX_APP="ROX-CLib"
+
+NO_AUTOHEADER=1
+NO_AUTOMAKE=1
+
+src_compile() {
+	lndirs
+	cd ${B}/${ROX_APP}/src
+	cygautoreconf
+	cd ${B}/${ROX_APP}
+	rox_compile
+}
+
+src_install() {
+	local arch=${ARCH/i6/ix}
+
+	cd ${B}
+	rox_install
+	mv ${D}/usr/lib/rox/${ROX_APP} ${D}/usr/lib/
+
+	sed -e "/^libdir=/ s|=.*|='/usr/lib/${ROX_APP}/CYGWIN-${arch}/lib'|" \
+		-i ${D}/usr/lib/${ROX_APP}/CYGWIN-${arch}/lib/librox-clib.la
+	sed -e "s|\${APP_DIR}|/usr/lib/${ROX_APP}|" \
+		-i ${D}/usr/lib/${ROX_APP}/CYGWIN-${arch}/lib/${ROX_APP}.pc
+}
